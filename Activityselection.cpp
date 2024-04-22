@@ -1,93 +1,41 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-struct Edge {
-    int src;
-    int dest;
-    int weight;
+ #include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+struct act
+{
+    int fi;
+    int en;
 };
-
-bool compareEdge(const Edge& a, const Edge& b) {
-    return a.weight < b.weight;
+vector<act>ar;
+bool re( act a, act b)
+{
+    return a.en<b.en;
 }
-
-class UnionFind {
-public:
-    UnionFind(int size) : parent(size), rank(size, 0) {
-        for (int i = 0; i < size; ++i) {
-            parent[i] = i;
+void select(vector<act>ar)
+{
+    sort(ar.begin(),ar.end(),re);
+    cout<<"Activities ";
+    cout<<ar[0].fi<<":"<<ar[0].en<<" ";
+    int last=ar[0].en;
+    for(int i=1;i<ar.size();i++)
+    {
+        if(ar[i].fi>=last)
+        {
+            cout<<ar[i].fi<<":"<<ar[i].en<<" ";
+            last=ar[i].en;
         }
     }
-
-    int find(int u) {
-        if (parent[u] != u) {
-            parent[u] = find(parent[u]);
-        }
-        return parent[u];
-    }
-
-    bool unionSets(int u, int v) {
-        int rootU = find(u);
-        int rootV = find(v);
-
-        if (rootU == rootV) {
-            return false;
-        }
-
-        if (rank[rootU] > rank[rootV]) {
-            parent[rootV] = rootU;
-        } else if (rank[rootU] < rank[rootV]) {
-            parent[rootU] = rootV;
-        } else {
-            parent[rootV] = rootU;
-            rank[rootU]++;
-        }
-
-        return true;
-    }
-
-private:
-    std::vector<int> parent;
-    std::vector<int> rank;
-};
-
-std::vector<Edge> kruskal(int numVertices, const std::vector<Edge>& edges) {
-    std::vector<Edge> sortedEdges = edges;
-    std::sort(sortedEdges.begin(), sortedEdges.end(), compareEdge);
-
-    UnionFind uf(numVertices);
-
-    std::vector<Edge> mst;
-    for (const auto& edge : sortedEdges) {
-        if (uf.unionSets(edge.src, edge.dest)) {
-            mst.push_back(edge);
-        }
-    }
-
-    return mst;
 }
-
-int main() {
-    int numVertices = 5;
-    int numEdges = 7;
-
-    std::vector<Edge> edges = {
-        {0, 1, 2},
-        {0, 3, 6},
-        {1, 2, 3},
-        {1, 3, 8},
-        {1, 4, 5},
-        {2, 4, 7},
-        {3, 4, 9}
-    };
-
-    std::vector<Edge> mst = kruskal(numVertices, edges);
-
-    std::cout << "Edges in the Minimum Spanning Tree:\n";
-    for (const auto& edge : mst) {
-        std::cout << "Edge (" << edge.src << " -> " << edge.dest << "), Weight: " << edge.weight << "\n";
+int main()
+{
+    int n;
+    cin>>n;
+    for(ll i=0;i<n;i++)
+    {
+        int a,b;
+        cin>>a>>b;
+        ar.push_back({a,b});
     }
-
+    select(ar);
     return 0;
 }
